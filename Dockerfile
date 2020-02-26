@@ -48,8 +48,8 @@ RUN cd /protobuf-c && \
         make install DESTDIR=${OUTDIR}
 RUN find ${OUTDIR} -name "*.a" -delete -or -name "*.la" -delete
 
-RUN go get -u github.com/golang/protobuf/protoc-gen-go
-        && install -c ${GOPATH}/bin/protoc-gen* ${OUTDIR}/usr/bin/
+RUN go get -u github.com/golang/protobuf/protoc-gen-go && \
+        install -c ${GOPATH}/bin/protoc-gen* ${OUTDIR}/usr/bin/
 
 RUN mkdir -p ${GOPATH}/src/github.com/pseudomuto/protoc-gen-doc && \
         curl -L https://github.com/pseudomuto/protoc-gen-doc/archive/v${PROTOC_GEN_DOC_VERSION}.tar.gz | tar xvz --strip 1 -C ${GOPATH}/src/github.com/pseudomuto/protoc-gen-doc
