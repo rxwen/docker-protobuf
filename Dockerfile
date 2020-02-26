@@ -125,7 +125,7 @@ RUN for p in protoc-gen-swift protoc-gen-swiftgrpc; do \
         ln -s /protoc-gen-swift/${p} /usr/bin/${p}; \
     done
 
-npm install -g protobufjs
+RUN npm install -g protobufjs
 
 RUN apk add --no-cache curl && \
     mkdir -p /protobuf/google/protobuf && \
