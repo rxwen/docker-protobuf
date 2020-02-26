@@ -117,13 +117,15 @@ RUN upx --lzma \
 
 
 FROM alpine:3.6
-RUN apk add --no-cache libstdc++
+RUN apk add --no-cache libstdc++ npm
 COPY --from=packer /out/ /
 COPY --from=rust_builder /out/ /
 COPY --from=swift_builder /protoc-gen-swift /protoc-gen-swift
 RUN for p in protoc-gen-swift protoc-gen-swiftgrpc; do \
         ln -s /protoc-gen-swift/${p} /usr/bin/${p}; \
     done
+
+npm install -g protobufjs
 
 RUN apk add --no-cache curl && \
     mkdir -p /protobuf/google/protobuf && \
