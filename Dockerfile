@@ -23,7 +23,7 @@ RUN cd /protobuf && \
         autoreconf -f -i -Wall,no-obsolete && \
         ./configure --prefix=/usr --enable-static=no && \
         make -j2 && make install
-RUN cd grpc && \
+RUN cd /grpc && \
         make -j2 plugins
 RUN cd /grpc-java/compiler/src/java_plugin/cpp && \
         g++ \
