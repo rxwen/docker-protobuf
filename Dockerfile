@@ -1,4 +1,4 @@
-FROM alpine:3.8 as protoc_builder
+FROM golang:1.13.8-alpine as protoc_builder
 RUN apk add --no-cache build-base curl automake autoconf libtool git zlib-dev
 
 ENV GRPC_VERSION=1.16.0 \
@@ -48,28 +48,7 @@ RUN cd /protobuf-c && \
         make install DESTDIR=${OUTDIR}
 RUN find ${OUTDIR} -name "*.a" -delete -or -name "*.la" -delete
 
-RUN apk add --no-cache go
-ENV GOPATH=/go \
-        PATH=/go/bin/:$PATH
-RUN go get -u -v -ldflags '-w -s' \
-        github.com/Masterminds/glide \
-        github.com/golang/protobuf/protoc-gen-go \
-        github.com/gogo/protobuf/protoc-gen-gofast \
-        github.com/gogo/protobuf/protoc-gen-gogo \
-        github.com/gogo/protobuf/protoc-gen-gogofast \
-        github.com/gogo/protobuf/protoc-gen-gogofaster \
-        github.com/gogo/protobuf/protoc-gen-gogoslick \
-        github.com/twitchtv/twirp/protoc-gen-twirp \
-        github.com/chrusty/protoc-gen-jsonschema \
-        github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger \
-        github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway \
-        github.com/johanbrandhorst/protobuf/protoc-gen-gopherjs \
-        github.com/ckaznocha/protoc-gen-lint \
-        github.com/mwitkow/go-proto-validators/protoc-gen-govalidators \
-        github.com/lyft/protoc-gen-validate \
-        moul.io/protoc-gen-gotemplate \
-        github.com/micro/protoc-gen-micro \
-        && (cd ${GOPATH}/src/github.com/lyft/protoc-gen-validate && make build) \
+RUN go get -u github.com/golang/protobuf/protoc-gen-go
         && install -c ${GOPATH}/bin/protoc-gen* ${OUTDIR}/usr/bin/
 
 RUN mkdir -p ${GOPATH}/src/github.com/pseudomuto/protoc-gen-doc && \
